@@ -23,9 +23,14 @@ namespace SalesSystem.Business.Services
             await _context.SaveChangesAsync();
             return store;
         }
-        public async Task UpdateAsync(Store store)
+        public async Task UpdateAsync(int id, Store store)
         {
-            _context.Stores.Update(store);
+            var existing = await _context.Stores.FindAsync(id);
+            if (existing == null) return;
+
+            existing.BranchName = store.BranchName;
+            existing.Address = store.Address;
+
             await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(int id)

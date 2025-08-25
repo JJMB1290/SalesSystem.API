@@ -12,9 +12,10 @@ namespace SalesSystem.Domain.Entities
         public string Code { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public int Stock { get; set; }
 
         public ICollection<ProductStore> ProductStores { get; set; }
+
     }
 }

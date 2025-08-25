@@ -26,9 +26,15 @@ namespace SalesSystem.Business.Services
             return customer;
         }
 
-        public async Task UpdateAsync(Customer customer)
+        public async Task UpdateAsync(int id, Customer customer)
         {
-            _context.Customers.Update(customer);
+            var existing = await _context.Customers.FindAsync(id);
+            if (existing == null) return;
+
+            existing.FirstName = customer.FirstName;
+            existing.LastName = customer.LastName;
+            existing.Address = customer.Address;
+
             await _context.SaveChangesAsync();
         }
 

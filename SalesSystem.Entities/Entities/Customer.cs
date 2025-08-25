@@ -13,6 +13,6 @@ namespace SalesSystem.Domain.Entities
         public string LastName { get; set; }
         public string Address { get; set; }
 
-        public ICollection<CustomerProduct?> CustomerProducts { get; set; }
+        public ICollection<CustomerProduct>? CustomerProducts { get; set; }
     }
 }

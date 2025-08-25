@@ -11,5 +11,7 @@ namespace SalesSystem.Domain.Entities
         public int StoreId { get; set; }
         public string BranchName { get; set; }
         public string Address { get; set; }
+
+        public ICollection<ProductStore>? ProductStores { get; set; }
     }
 }

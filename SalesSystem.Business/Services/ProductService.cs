@@ -26,9 +26,17 @@ namespace SalesSystem.Business.Services
             return product;
         }
 
-        public async Task UpdateAsync(Product product)
+        public async Task UpdateAsync(int id, Product product)
         {
-            _context.Products.Update(product);
+            var existing = await _context.Products.FindAsync(id);
+            if (existing == null) return;
+
+            existing.Code = product.Code;
+            existing.Description = product.Description;
+            existing.Price = product.Price;
+            existing.Stock = product.Stock;
+            existing.Image = product.Image;
+
             await _context.SaveChangesAsync();
         }
 

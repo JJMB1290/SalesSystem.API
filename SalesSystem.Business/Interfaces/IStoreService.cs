@@ -12,7 +12,7 @@ namespace SalesSystem.Business.Interfaces
         Task<IEnumerable<Store>> GetAllAsync();
         Task<Store> GetByIdAsync(int id);
         Task<Store> AddAsync(Store store);
-        Task UpdateAsync(Store store);
+        Task UpdateAsync(int id, Store store);
         Task DeleteAsync(int id);
     }
 }

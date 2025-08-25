@@ -1,33 +1,86 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SalesSystem.API.Dtos;
 using SalesSystem.Business.Interfaces;
 using SalesSystem.Domain.Entities;
 
 namespace SalesSystem.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/stores")]
     [ApiController]
     public class StoresController : ControllerBase
     {
-        private readonly IStoreService _service;
-        public StoresController(IStoreService service) => _service = service;
+        private readonly IStoreService _storeService;
+        public StoresController(IStoreService service) => _storeService = service;
 
-        [HttpGet]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _service.GetAllAsync());
+            var lstStores = await _storeService.GetAllAsync().ConfigureAwait(false);
+            if (lstStores == null) return NotFound();
+            StoresDto getStore = new StoresDto();
+            List<StoresDto> lstStoresDto = new List<StoresDto>();
+            foreach (var store in lstStores)
+            {
+                getStore = new StoresDto()
+                {
+                    storeId = store.StoreId,
+                    address = store.Address,
+                    branchName = store.BranchName
+                };
+                lstStoresDto.Add(getStore);
+            }
+            return Ok(lstStoresDto);
         }
-        
-        [HttpGet("{id}")]
+
+        [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await _service.GetByIdAsync(id));
+            var store = await _storeService.GetByIdAsync(id);
+            if (store == null) return NotFound();
+            StoresDto dtoStore = new StoresDto()
+            {
+                storeId = store.StoreId,
+                address = store.Address,
+                branchName = store.BranchName
+            };
+
+            return Ok(dtoStore);
         }
-        [HttpPost] public async Task<IActionResult> Create(Store store)
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(StoresDto storeDto)
         {
-            return Ok(await _service.AddAsync(store));
+            if (storeDto == null) return NotFound();
+
+            Store store = new Store()
+            {
+                StoreId = storeDto.storeId,
+                Address = storeDto.address,
+                BranchName = storeDto.branchName
+            };
+
+            var created = await _storeService.AddAsync(store);
+            return CreatedAtAction(nameof(GetById), new { id = created.StoreId }, created);
         }
-        [HttpPut("{id}")] public async Task<IActionResult> Update(int id, Store store) { await _service.UpdateAsync(store); return NoContent(); }
-        [HttpDelete("{id}")] public async Task<IActionResult> Delete(int id) { await _service.DeleteAsync(id); return NoContent(); }
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update(int id, StoresDto storeDto)
+        {
+            if (storeDto == null) return NoContent();
+
+            Store store = new Store()
+            {
+                StoreId = storeDto.storeId,
+                Address = storeDto.address,
+                BranchName = storeDto.branchName
+            };
+            await _storeService.UpdateAsync(id, store);
+            return NoContent();
+        }
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _storeService.DeleteAsync(id);
+            return NoContent();
+        }
     }
 }

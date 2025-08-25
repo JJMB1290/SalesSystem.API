@@ -36,8 +36,8 @@ namespace SalesSystem.Data.Context
 
             // Datos iniciales - Products
             modelBuilder.Entity<Product>().HasData(
-                new Product { ProductId = 1, Code = "P001", Description = "Laptop", Price = 999.99m, Image = "https://img.com/laptop.jpg", Stock = 10 },
-                new Product { ProductId = 2, Code = "P002", Description = "Smartphone", Price = 599.99m, Image = "https://img.com/phone.jpg", Stock = 25 }
+                new Product { ProductId = 1, Code = "P001", Description = "Laptop", Image = null, Price = 999.99m, Stock = 10 },
+                new Product { ProductId = 2, Code = "P002", Description = "Smartphone", Image = null, Price = 599.99m, Stock = 25 }
             );
 
             // Datos iniciales - Customers
